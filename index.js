@@ -5,8 +5,12 @@ const Url 				= require( './src/models/url' )
 const User 				= require( './src/models/user' )
 const path				= require( 'path')
 const cookieParser		= require( 'cookie-parser' )
-const { convertUrlInId } = require( './src/utils/converters' )
-const { auth , validateToken} 			= require( './src/middleware/auth' )
+const axios 			= require( 'axios' )
+const http  			= require( 'http' ).Server( app )
+const io				= require( 'socket.io' )( http )
+
+const { convertUrlInId , convertIdInUrl } 	= require( './src/utils/converters' )
+const { auth , validateToken} 				= require( './src/middleware/auth' )
 
 require( './src/db/mongoose' )
 
@@ -21,15 +25,36 @@ app.use(bodyParser.urlencoded({
 app.use( bodyParser.json( ))
 app.use( express.static( path.join( __dirname , 'src' , "public") ) )
 
-app.get('/signup'  , ( req , res  )=>{
-	console.log( 'sign up' )
+
+io.on( 'connection', () =>{
+ console.log( 'a user is connected')
+})
+
+app.get('/signup'  ,( req , res  )=>{
+
 	res.render( 'signup' )
 })
 
 
-app.get( '/' , auth , ( req , res ) =>{
-	console.log( 'Welcome' + req.user.email )
+app.get( '/' , auth , async( req , res ) =>{
+
+	Ids = req.user.IdsCreated
+
+	Ids.forEach( async( Id ) =>{
+		
+		
+		try{
+			let url 	= await Url.findOne( { Id : Id.Id } )
+			let {data}  = await axios.get( 'http://textance.herokuapp.com/title/'+url.originalUrl )
+
+			io.emit( 'addUrlToPage' , { url : url.shortnedUrl ,title : data , createdAt : url.createdAt } )
+		}catch( error ){
+
+		}
+	} )
+
 	return res.render( 'home' , { name : req.user.name })
+
 })
 
 
@@ -79,7 +104,11 @@ app.post("/get_short_url" , auth ,  async ( req , res )  =>{
 	const originalUrl 	= req.body.url.replace( 'https://' , '' )
 	const url 			= new Url( { originalUrl } )
 	await url.save( )
-	res.send( { shortnedUrl : url.shortnedUrl , originalUrl : url.originalUrl } )
+	
+	req.user.IdsCreated.push( { Id : url.Id } )
+	await req.user.save( )
+
+	res.send( { shortnedUrl : url.shortnedUrl , originalUrl : url.originalUrl , createdAt  : url.createdAt } )
 
 })
 
@@ -91,6 +120,6 @@ app.get("/:url" , async ( req , res ) =>{
 
 })
 
-app.listen( process.env.PORT || 3000 , ( ) =>{
+const server = http.listen( process.env.PORT || 3000 , ( ) =>{
 	console.log( "Server is up" )
 })

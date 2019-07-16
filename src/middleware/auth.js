@@ -20,7 +20,7 @@ const auth = async ( req , res , next ) =>{
 	user    = await validateToken( token )
 
 	req.user = user
-	next( )
+	await next( )
 }
 
 module.exports = { auth , validateToken }

@@ -16,10 +16,24 @@
 		<div style="padding:5px">
 			<input type="text" name="shortUrl" id="shortUrl" class="form-control"disabled>
 		</div>
+		<div>
+			Created Urls
+			<div id="UrlsToReplace"></div>
+		</div>
 	
 	</div>
 
+	<script type="template" id="urlTemplate">
+			
+		<div class ="url card" id="{{url}}">
 
-	
- 
+			<span class = "url__title"><i class="fas fa-bolt"></i><h3>{{title}}</h3></span>
+			<span class = "url__meta"><sub>{{createdAt}}</sub></span>	
+			<h6><a href="/{{url}}">url.ly/{{url}}</a></h6>
+		</div>
+
+	</script>
+
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
 <% include ./partials/footer %>

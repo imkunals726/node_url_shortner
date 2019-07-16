@@ -1,0 +1,19 @@
+body {
+    line-height: 1.4;
+    color: #333333;
+    font-family: 'Pacifico', cursive;
+}
+.url {
+    margin-bottom: 16px;   
+}
+
+.url__name {
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.url__meta {
+    color: #777;
+    font-size: 14px;
+}
