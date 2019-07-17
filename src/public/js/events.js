@@ -3,7 +3,7 @@ $getUrl 		= $('#getUrl')
 $shortUrl 		= document.querySelector( '#shortUrl' )
 $url    		= document.querySelector('#Url')
 $urlsToReplace 	= document.querySelector('#UrlsToReplace' )
-
+$logout  		= $('#logout' )
 function renderToWebPage( url , title , createdAt ){
 
 	let template 	= $('#urlTemplate').html( );
@@ -11,6 +11,8 @@ function renderToWebPage( url , title , createdAt ){
 	let rendered  	= Mustache.render( template , { url , title , createdAt } )
 	$("#UrlsToReplace").append( rendered )
 }
+
+
 
 $getUrl.click( function( e ) 
 {
@@ -40,4 +42,9 @@ $getUrl.click( function( e )
 
 socket.on( 'addUrlToPage' , ( { url , title , createdAt } )=>{
 	renderToWebPage( url , title , createdAt )
+})
+
+socket.on( 'logout' , ( ) => {
+	document.cookie = 'token=;path=/'
+	window.location = '/login'
 })

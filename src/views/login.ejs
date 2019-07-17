@@ -1,16 +1,26 @@
 <% include ./partials/header %>
 
-<form>
-	<div class='form-group'>
-		<label for="email">Email</label>
-		<input type="text" name="email" id="email" class="form-control">
+<div class="container">
+	<form style="padding-bottom: 10px">
+		<div class='form-group'>
+			<label for="email">Email</label>
+			<input type="text" name="email" id="email" class="form-control">
+		</div>
+		<div class='form-group'>
+			<label for="password">Password</label>
+			<input type="password" name="password" id="password" class="form-control">
+		</div>
+		<div class ="div-align-center">
+			<button id ="login" class = 'btn btn-danger'>Sign In   <i class="fas fa-sign-in-alt"></i></button>
+		</div>
+	</form>
+	<div class= "div-align-center" >
+		<sub><b>OR</b></sub>
 	</div>
-	<div class='form-group'>
-		<label for="password">Password</label>
-		<input type="password" name="password" id="password" class="form-control">
+	<br>
+	<div class="div-align-center">
+		<a  class = 'btn btn-primary' style = 'text-align: center'href = "/signup" ><i class="fas fa-user-plus"></i>  Sign Up</a>
 	</div>
-	<button id ="login">Submit</button>
-</form>
-
+</div>
 
 <% include ./partials/footer %>

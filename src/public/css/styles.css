@@ -3,10 +3,30 @@ body {
     color: #333333;
     font-family: 'Pacifico', cursive;
 }
-.url {
-    margin-bottom: 16px;   
+
+.div-align-center{
+    text-align: center;
+}
+.card{
+	background: #FFF;
+	transition: background 1.0s ease-in-out;
 }
 
+.card:hover{
+	background: #d3d3d3;
+}
+
+
+.url {
+    margin-bottom: 16px;   
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+}
+.url{
+	visibility: visible;
+    opacity: 1;
+}
 .url__name {
     font-weight: 600;
     font-size: 14px;

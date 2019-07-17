@@ -1,7 +1,7 @@
 const mongoose = require( 'mongoose' )
 
 const connect = async ( ) => {
-	await mongoose.connect( 'mongodb://localhost:27017/url_shortner' ,{
+	await mongoose.connect( process.env.MONGODB_URL ,{
 		useCreateIndex		: true,
 		useNewUrlParser 	: true,
 		useFindAndModify 	: true

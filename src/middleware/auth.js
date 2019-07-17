@@ -3,7 +3,7 @@ const User 		= require( '../models/user' )
 const jwt		= require( 'jsonwebtoken' )
 
 const validateToken = async ( token ) =>{
-	user_id = await jwt.verify( token , 'thisisauthtoken' )
+	user_id = await jwt.verify( token , process.env.JWT_SECRET )
 	user    = await User.findOne( { _id : user_id } )
 
 	if( !user ){
@@ -17,6 +17,9 @@ const validateToken = async ( token ) =>{
 const auth = async ( req , res , next ) =>{
 
 	token 	= req.cookies.token
+	if( !token ){
+		res.redirect( '/login' )
+	}
 	user    = await validateToken( token )
 
 	req.user = user

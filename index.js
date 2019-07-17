@@ -69,7 +69,6 @@ app.get('/login' , async ( req , res ) =>{
 	
 
 	if( req.cookies.token ){
-		console.log( req.cookies.token )
 		try{
 			const user = await validateToken( req.cookies.token )
 			console.log( user )
@@ -99,6 +98,14 @@ app.post( '/login' , async ( req , res ) =>{
 	return res.send( { token } )
 })
 
+app.get( '/logout' , auth , async( req ,res )=>{
+	console.log( req.user.tokens )
+	req.user.tokens = await req.user.tokens.filter( ( token ) => token.token !== req.cookies.token )
+	console.log( req.user.tokens )
+	await req.user.save( )
+	io.emit( 'logout' )
+})
+
 app.post("/get_short_url" , auth ,  async ( req , res )  =>{
 
 	const originalUrl 	= req.body.url.replace( 'https://' , '' )
@@ -113,7 +120,7 @@ app.post("/get_short_url" , auth ,  async ( req , res )  =>{
 })
 
 app.get("/:url" , async ( req , res ) =>{
-	console.log( "url = " + req.params.url )
+	
 	const Id 	= convertUrlInId( req.params.url )
 	const url 	= await Url.findOne( { Id } )
 	return res.redirect( "https://"+ url.originalUrl )
