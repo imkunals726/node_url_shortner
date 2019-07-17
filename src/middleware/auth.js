@@ -1,6 +1,7 @@
 const mongoose 	= require( 'mongoose' )
 const User 		= require( '../models/user' )
 const jwt		= require( 'jsonwebtoken' )
+const bcrypt	 = require( 'bcryptjs' ) 
 
 const validateToken = async ( token ) =>{
 	user_id = await jwt.verify( token , process.env.JWT_SECRET )

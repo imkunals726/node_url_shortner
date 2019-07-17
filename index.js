@@ -85,16 +85,10 @@ app.get('/login' , async ( req , res ) =>{
 })
 
 app.post( '/login' , async ( req , res ) =>{
-	const user = await User.findOne( { email : req.body.email } )
-	console.log( req.body )
-	console.log( user )
-	if(!user){
-		throw new Error( 'Please Enter valid Email or Password' )
-	}
-	if( user.password !== req.body.password ){
-		throw new Error( 'Please Enter valid Email or Password' )
-	}
-	token = await user.generateAuthToken( )
+
+	const user 	= await User.findByCredentials( req.body.email , req.body.password )
+	token 		= await user.generateAuthToken( )
+	
 	return res.send( { token } )
 })
 

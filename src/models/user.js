@@ -28,6 +28,31 @@ const userSchema = new mongoose.Schema( {
 	}]
  })
 
+userSchema.pre( 'save' , async function( next ) {
+	const user = this
+
+	if( user.isModified( 'password' ) ){
+		user.password = await bcrypt.hash( user.password , 8 )
+	}
+
+	next( )
+})
+
+userSchema.statics.findByCredentials = async ( email , password ) =>{
+	const user 		= await User.findOne( { email } )
+	if( !user ){
+		throw new Error( 'Unable to login' )
+	}
+	
+	const newPass 	= await bcrypt.hash( password , 8 )
+	const isMatched = await bcrypt.compare( password , user.password )
+
+	if( !isMatched ){
+		throw new Error( 'Unable to login' )
+	}
+	return user
+}
+
 userSchema.methods.generateAuthToken = async function ( ){
 	
 	const user 	= this
